@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/page0"
+            android:icon="@drawable/ic_view_list_black_24dp"
+            android:title="Телефонный справочник" />
+        <item
+            android:id="@+id/page1"
+            android:icon="@drawable/ic_menu_lecture"
+            android:title="1. Содержание" />
+        <item
+            android:id="@+id/page2"
+            android:icon="@drawable/ic_menu_lecture"
+            android:title="2. Типы" />
+        <item
+            android:id="@+id/page3"
+            android:icon="@drawable/ic_menu_lecture"
+            android:title="3. История" />
+        <item
+            android:id="@+id/page4"
+            android:icon="@drawable/ic_menu_lecture"
+            android:title="4. В массовой культуре" />
+    </group>
+
+    <item android:title="Почитать">
+        <menu>
+            <item
+                android:id="@+id/nav_view1"
+                android:icon="@drawable/ic_import_contacts_black_24dp"
+                android:title="Википедия" />
+        </menu>
+    </item>
+
+    <item android:title="Обратная связь">
+        <menu>
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_drafts_black_24dp"
+                android:title="Написать отзыв" />
+        </menu>
+    </item>
+
+</menu>
