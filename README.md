@@ -1,4 +1,4 @@
-# GVS04_Electronic_Book
+# GVS03_Electronic_Book
 
 ## Разработка программ для мобильных устройств
 
