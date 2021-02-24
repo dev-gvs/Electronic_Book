@@ -4,7 +4,7 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/page0"
-            android:icon="@drawable/ic_view_list_black_24dp"
+            android:icon="@drawable/ic_menu_icon"
             android:title="Телефонный справочник" />
         <item
             android:id="@+id/page1"
@@ -28,7 +28,7 @@
         <menu>
             <item
                 android:id="@+id/nav_view1"
-                android:icon="@drawable/ic_import_contacts_black_24dp"
+                android:icon="@drawable/ic_menu_internet"
                 android:title="Википедия" />
         </menu>
     </item>
@@ -37,7 +37,7 @@
         <menu>
             <item
                 android:id="@+id/nav_send"
-                android:icon="@drawable/ic_drafts_black_24dp"
+                android:icon="@drawable/ic_menu_review"
                 android:title="Написать отзыв" />
         </menu>
     </item>
