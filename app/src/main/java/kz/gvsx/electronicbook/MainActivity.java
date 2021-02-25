@@ -25,12 +25,16 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -39,13 +43,18 @@ public class MainActivity extends AppCompatActivity
     private static final String ID_TOPIC = "idTopic"; // Название ключа для хранения ID-кода выбранной темы
     private static final String FULL_SIZE_FONT = "isFullSizeFont"; // Название ключа для хранения выбора крупного шрифта
     private static final String MY_SEARCH = "mysearch"; // Название ключа для хранения разрешения поиска
+    private static final String HTML_ASSETS_DIR = "file:///android_asset/HTML/"; // Путь к html-страницам в ресурсах приложения
+    private static final List<String> LIST_OF_TOPICS = new ArrayList<>();
+    private static final HashMap<Integer, Integer> ID_TO_INDEX = new HashMap<>();
+    private static final HashMap<Integer, Integer> INDEX_TO_ID = new HashMap<>();
     EditText searchText; // Поле для ввода искомого текста
     TextView searchCountText; // Поле для отображения сколько найдено фрагментов поиска
     ImageButton searchForwardButton, searchCloseButton, searchBackButton; // Кнопки навигации поиска
     RelativeLayout searchToolLayout;// Панель поиска
     FloatingActionButton searchButton;// Круглая кнопка поиска
+    private NestedScrollView nestedScrollView;
+    private NavigationView navigationView;
     private WebView webView; // Компонент для просмотра html-страниц
-    private String resourceDir; // Путь к html-страницам в ресурсах приложения
     private int idTopic; // ID-код выбранной темы
     private SharedPreferences sPref; // Переменная для работы с настройками программы
     private boolean isFullSizeFont = true; // Переменная признака выбора крупного шрифта с инициализацией
@@ -101,7 +110,7 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         // Устанавливаем выбранный пункт меню
@@ -109,6 +118,8 @@ public class MainActivity extends AppCompatActivity
             navigationView.setCheckedItem(idTopic);
         } catch (Exception ignore) {
         }
+
+        nestedScrollView = findViewById(R.id.nestedScrollView);
 
         // Поиск компонента для отображения html-страниц
         webView = findViewById(R.id.webView);
@@ -133,8 +144,21 @@ public class MainActivity extends AppCompatActivity
 
         initWebView(isFullSizeFont);
 
-        // Определение пути к html-файлам
-        resourceDir = getString(R.string.resource_directory);
+        LIST_OF_TOPICS.add(HTML_ASSETS_DIR + "0/0.htm");
+        LIST_OF_TOPICS.add(HTML_ASSETS_DIR + "1/1.htm");
+        LIST_OF_TOPICS.add(HTML_ASSETS_DIR + "2/2.htm");
+        LIST_OF_TOPICS.add(HTML_ASSETS_DIR + "3/3.htm");
+        LIST_OF_TOPICS.add(HTML_ASSETS_DIR + "4/4.htm");
+        ID_TO_INDEX.put(R.id.page0, 0);
+        ID_TO_INDEX.put(R.id.page1, 1);
+        ID_TO_INDEX.put(R.id.page2, 2);
+        ID_TO_INDEX.put(R.id.page3, 3);
+        ID_TO_INDEX.put(R.id.page4, 4);
+        INDEX_TO_ID.put(0, R.id.page0);
+        INDEX_TO_ID.put(1, R.id.page1);
+        INDEX_TO_ID.put(2, R.id.page2);
+        INDEX_TO_ID.put(3, R.id.page3);
+        INDEX_TO_ID.put(4, R.id.page4);
 
         //Инициализация начала просмотра html-страниц
         onNavigationItemSelected(null);
@@ -215,7 +239,30 @@ public class MainActivity extends AppCompatActivity
         });
 
         searchCloseButton.performClick();
+    }
 
+    public void btnBackOnClick(View view) {
+        try {
+            int topicIndex = ID_TO_INDEX.get(idTopic) - 1;
+            String topicLink = LIST_OF_TOPICS.get(topicIndex);
+            webView.loadUrl(topicLink);
+            idTopic = INDEX_TO_ID.get(topicIndex);
+            nestedScrollView.scrollTo(0, 0);
+            navigationView.setCheckedItem(idTopic);
+        } catch (Exception e) {
+        }
+    }
+
+    public void btnNextOnClick(View view) {
+        try {
+            int topicIndex = ID_TO_INDEX.get(idTopic) + 1;
+            String topicLink = LIST_OF_TOPICS.get(topicIndex);
+            webView.loadUrl(topicLink);
+            idTopic = INDEX_TO_ID.get(topicIndex);
+            nestedScrollView.scrollTo(0, 0);
+            navigationView.setCheckedItem(idTopic);
+        } catch (Exception e) {
+        }
     }
 
     // Сохранение данных в буфер при переворачивании экрана
@@ -315,35 +362,17 @@ public class MainActivity extends AppCompatActivity
             id = idTopic;
         } else { // Вызывается при выборе темы из меню тем
             id = item.getItemId();
-            // Сохранение выбранной темы, кроме случаев всех внешних переходов
-            if (item.isCheckable()) {
-                idTopic = id;
-            }
         }
 
         // Блок выбора тем
-        switch (id) {
-            case R.id.page0:
-                webView.loadUrl(resourceDir + "0/0.htm");
-                break;
-            case R.id.page1:
-                webView.loadUrl(resourceDir + "1/1.htm");
-                break;
-            case R.id.page2:
-                webView.loadUrl(resourceDir + "2/2.htm");
-                break;
-            case R.id.page3:
-                webView.loadUrl(resourceDir + "3/3.htm");
-                break;
-            case R.id.page4:
-                webView.loadUrl(resourceDir + "4/4.htm");
-                break;
-            case R.id.nav_view1:
-                openLinkExternally("https://en.wikipedia.org/wiki/Telephone_directory");
-                break;
-            case R.id.nav_send:
-                sendMail("email@example.com", "Предложения по приложению", "Здравствуйте!");
-                break;
+        if (id == R.id.nav_view1) {
+            openLinkExternally("https://en.wikipedia.org/wiki/Telephone_directory");
+        } else if (id == R.id.nav_send) {
+            sendMail("email@example.com", "Предложения по приложению", "Здравствуйте!");
+        } else {
+            idTopic = id;
+            int topicIndex = ID_TO_INDEX.get(id);
+            webView.loadUrl(LIST_OF_TOPICS.get(topicIndex));
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
