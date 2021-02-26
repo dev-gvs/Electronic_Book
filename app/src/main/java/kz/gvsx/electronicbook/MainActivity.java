@@ -144,11 +144,11 @@ public class MainActivity extends AppCompatActivity
 
         initWebView(isFullSizeFont);
 
-        LIST_OF_TOPICS.add(HTML_ASSETS_DIR + "0/0.htm");
-        LIST_OF_TOPICS.add(HTML_ASSETS_DIR + "1/1.htm");
-        LIST_OF_TOPICS.add(HTML_ASSETS_DIR + "2/2.htm");
-        LIST_OF_TOPICS.add(HTML_ASSETS_DIR + "3/3.htm");
-        LIST_OF_TOPICS.add(HTML_ASSETS_DIR + "4/4.htm");
+        LIST_OF_TOPICS.add("0/0.htm");
+        LIST_OF_TOPICS.add("1/1.htm");
+        LIST_OF_TOPICS.add("2/2.htm");
+        LIST_OF_TOPICS.add("3/3.htm");
+        LIST_OF_TOPICS.add("4/4.htm");
         ID_TO_INDEX.put(R.id.page0, 0);
         ID_TO_INDEX.put(R.id.page1, 1);
         ID_TO_INDEX.put(R.id.page2, 2);
@@ -244,7 +244,7 @@ public class MainActivity extends AppCompatActivity
     public void btnBackOnClick(View view) {
         try {
             int topicIndex = ID_TO_INDEX.get(idTopic) - 1;
-            String topicLink = LIST_OF_TOPICS.get(topicIndex);
+            String topicLink = HTML_ASSETS_DIR + LIST_OF_TOPICS.get(topicIndex);
             webView.loadUrl(topicLink);
             idTopic = INDEX_TO_ID.get(topicIndex);
             nestedScrollView.scrollTo(0, 0);
@@ -256,7 +256,7 @@ public class MainActivity extends AppCompatActivity
     public void btnNextOnClick(View view) {
         try {
             int topicIndex = ID_TO_INDEX.get(idTopic) + 1;
-            String topicLink = LIST_OF_TOPICS.get(topicIndex);
+            String topicLink = HTML_ASSETS_DIR + LIST_OF_TOPICS.get(topicIndex);
             webView.loadUrl(topicLink);
             idTopic = INDEX_TO_ID.get(topicIndex);
             nestedScrollView.scrollTo(0, 0);
@@ -372,7 +372,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             idTopic = id;
             int topicIndex = ID_TO_INDEX.get(id);
-            webView.loadUrl(LIST_OF_TOPICS.get(topicIndex));
+            webView.loadUrl(HTML_ASSETS_DIR + LIST_OF_TOPICS.get(topicIndex));
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
